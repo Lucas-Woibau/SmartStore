@@ -7,16 +7,34 @@ namespace SmarthStore.Controllers
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment environment;
+        private readonly IWebHostEnvironment _environment;
+        private readonly int _pageSzie = 5;
 
         public ProductsController(ApplicationDbContext context, IWebHostEnvironment environment)
         {
             this._context = context;
-            this.environment = environment;
+            this._environment = environment;
         }
-        public IActionResult Index()
+        public IActionResult Index(int pageIndex)
         {
-            var products = _context.Products.OrderByDescending(p => p.Id).ToList();
+            IQueryable<Product> query = _context.Products;
+            query = query.OrderByDescending(p => p.Id);
+
+            //Pagination funcionality
+            if(pageIndex < 1)
+            {
+                pageIndex = 1;
+            }
+
+            decimal count = query.Count();
+            int totalPages = (int)Math.Ceiling(count / _pageSzie);
+            query = query.Skip((pageIndex - 1) * _pageSzie).Take(_pageSzie);
+
+            var products = query.ToList();
+
+            ViewData["PageIndex"] = pageIndex;
+            ViewData["TotalPages"] = totalPages;
+
             return View(products);
         }
 
@@ -42,7 +60,7 @@ namespace SmarthStore.Controllers
             string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssff");
             newFileName += Path.GetExtension(productDto.ImageFile!.FileName);
 
-            string imageFullPath = environment.WebRootPath + "/products/" + newFileName;
+            string imageFullPath = _environment.WebRootPath + "/products/" + newFileName;
             using(var stream = System.IO.File.Create(imageFullPath))
             {
                 productDto.ImageFile.CopyTo(stream);
@@ -118,14 +136,14 @@ namespace SmarthStore.Controllers
                 newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff");
                 newFileName += Path.GetExtension(productDto.ImageFile.FileName);
 
-                string imageFullPath = environment.WebRootPath + "/products/" + newFileName;
+                string imageFullPath = _environment.WebRootPath + "/products/" + newFileName;
                 using (var stream = System.IO.File.Create(imageFullPath))
                 {
                     productDto.ImageFile.CopyTo(stream);
                 }
 
                 //Delete the old image
-                string oldImageFullPath = environment.WebRootPath + "/products/" + product.ImageFileName;
+                string oldImageFullPath = _environment.WebRootPath + "/products/" + product.ImageFileName;
                 System.IO.File.Delete(oldImageFullPath);
             }
 
@@ -150,7 +168,7 @@ namespace SmarthStore.Controllers
                 return RedirectToAction("Index", "Products");
             }
 
-            string imageFullPath = environment.WebRootPath + "/products/" + product.ImageFileName;
+            string imageFullPath = _environment.WebRootPath + "/products/" + product.ImageFileName;
             System.IO.File.Delete(imageFullPath);
 
             _context.Products.Remove(product);
