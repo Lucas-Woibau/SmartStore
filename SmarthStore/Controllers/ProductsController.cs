@@ -15,9 +15,16 @@ namespace SmarthStore.Controllers
             this._context = context;
             this._environment = environment;
         }
-        public IActionResult Index(int pageIndex)
+        public IActionResult Index(int pageIndex, string? search)
         {
             IQueryable<Product> query = _context.Products;
+
+            //Search funcionality
+            if(search != null)
+            {
+                query = query.Where(p => p.Name.Contains(search) || p.Brand.Contains(search));
+            }
+
             query = query.OrderByDescending(p => p.Id);
 
             //Pagination funcionality
@@ -34,6 +41,8 @@ namespace SmarthStore.Controllers
 
             ViewData["PageIndex"] = pageIndex;
             ViewData["TotalPages"] = totalPages;
+
+            ViewData["Search"] = search ?? "";
 
             return View(products);
         }
