@@ -15,7 +15,7 @@ namespace SmarthStore.Controllers
             this._context = context;
             this._environment = environment;
         }
-        public IActionResult Index(int pageIndex, string? search)
+        public IActionResult Index(int pageIndex, string? search, string ?column, string ?orderBy)
         {
             IQueryable<Product> query = _context.Products;
 
@@ -23,6 +23,20 @@ namespace SmarthStore.Controllers
             if(search != null)
             {
                 query = query.Where(p => p.Name.Contains(search) || p.Brand.Contains(search));
+            }
+
+            //SortFuncionality
+            string[] validColumns = { "Id", "Name", "Brand", "Category", "Price", "CreatedAt" };
+            string[] validOrderBy = { "desc", "asc" };
+
+            if (!validColumns.Contains(column))
+            {
+                column = "Id";
+            }
+
+            if (!validOrderBy.Contains(orderBy))
+            {
+                column = "desc";
             }
 
             query = query.OrderByDescending(p => p.Id);
@@ -43,6 +57,9 @@ namespace SmarthStore.Controllers
             ViewData["TotalPages"] = totalPages;
 
             ViewData["Search"] = search ?? "";
+
+            ViewData["Column"] = column;
+            ViewData["OrderBy"] = orderBy;
 
             return View(products);
         }
@@ -84,7 +101,7 @@ namespace SmarthStore.Controllers
                 Price = productDto.Price,
                 Description = productDto.Description,
                 ImageFileName = newFileName,
-                CreateAt = DateTime.Now,
+                CreatedAt = DateTime.Now,
             };
 
             _context.Products.Add(product);
@@ -114,7 +131,7 @@ namespace SmarthStore.Controllers
 
             ViewData["ProductId"] = product.Id;
             ViewData["ImageFileName"] = product.ImageFileName;
-            ViewData["CreatedAt"] = product.CreateAt.ToString("MM/dd/yyy");
+            ViewData["CreatedAt"] = product.CreatedAt.ToString("MM/dd/yyy");
 
             return View(productDto);
         }
@@ -133,7 +150,7 @@ namespace SmarthStore.Controllers
             {
                 ViewData["ProductId"] = product.Id;
                 ViewData["ImageFileName"] = product.ImageFileName;
-                ViewData["CreatedAt"] = product.CreateAt.ToString("MM/dd/yyy");
+                ViewData["CreatedAt"] = product.CreatedAt.ToString("MM/dd/yyy");
 
                 return View(productDto);
             }

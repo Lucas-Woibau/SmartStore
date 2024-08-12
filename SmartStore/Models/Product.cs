@@ -18,6 +18,6 @@ namespace SmarthStore.Models
         public string Description { get; set; } = "";
         [MaxLength(100)]
         public string ImageFileName { get; set; } = "";
-        public DateTime CreateAt { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }
