@@ -15,12 +15,12 @@ namespace SmarthStore.Controllers
             this._context = context;
             this._environment = environment;
         }
-        public IActionResult Index(int pageIndex, string? search, string ?column, string ?orderBy)
+        public IActionResult Index(int pageIndex, string? search, string? column, string? orderBy)
         {
             IQueryable<Product> query = _context.Products;
 
             //Search funcionality
-            if(search != null)
+            if (search != null)
             {
                 query = query.Where(p => p.Name.Contains(search) || p.Brand.Contains(search));
             }
@@ -39,10 +39,83 @@ namespace SmarthStore.Controllers
                 column = "desc";
             }
 
-            query = query.OrderByDescending(p => p.Id);
+            if (!validColumns.Contains(column))
+            {
+                column = "Id";
+            }
+            if (!validColumns.Contains(column))
+            {
+                column = "desc";
+            }
+            if (column == "Name")
+            {
+                if (orderBy == "asc")
+                {
+                    query = query.OrderBy(p => p.Name);
+                }
+                else
+                {
+                    query = query.OrderByDescending(p => p.Name);
+                }
+            }
+            else if (column == "Brand")
+            {
+                if (orderBy == "asc")
+                {
+                    query = query.OrderBy(p => p.Brand);
+                }
+                else
+                {
+                    query = query.OrderByDescending(p => p.Brand);
+                }
+            }
+            if (column == "Category")
+            {
+                if (orderBy == "asc")
+                {
+                    query = query.OrderBy(p => p.Category);
+                }
+                else
+                {
+                    query = query.OrderByDescending(p => p.Category);
+                }
+            }
+            if (column == "Price")
+            {
+                if (orderBy == "asc")
+                {
+                    query = query.OrderBy(p => p.Price);
+                }
+                else
+                {
+                    query = query.OrderByDescending(p => p.Price);
+                }
+            }
+            if (column == "CreatedAt")
+            {
+                if (orderBy == "asc")
+                {
+                    query = query.OrderBy(p => p.CreatedAt);
+                }
+                else
+                {
+                    query = query.OrderByDescending(p => p.CreatedAt);
+                }
+            }
+            else
+            {
+                if (orderBy == "asc")
+                {
+                    query = query.OrderBy(p => p.Price);
+                }
+                else
+                {
+                    query = query.OrderByDescending(p => p.Price);
+                }
+            }
 
             //Pagination funcionality
-            if(pageIndex < 1)
+            if (pageIndex < 1)
             {
                 pageIndex = 1;
             }
@@ -72,12 +145,12 @@ namespace SmarthStore.Controllers
         [HttpPost]
         public IActionResult Create(ProductDTO productDto)
         {
-            if(productDto.ImageFile == null)
+            if (productDto.ImageFile == null)
             {
                 ModelState.AddModelError("ImageFile", "The image file is required");
             }
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(productDto);
             }
@@ -87,7 +160,7 @@ namespace SmarthStore.Controllers
             newFileName += Path.GetExtension(productDto.ImageFile!.FileName);
 
             string imageFullPath = _environment.WebRootPath + "/products/" + newFileName;
-            using(var stream = System.IO.File.Create(imageFullPath))
+            using (var stream = System.IO.File.Create(imageFullPath))
             {
                 productDto.ImageFile.CopyTo(stream);
             }
@@ -114,7 +187,7 @@ namespace SmarthStore.Controllers
         {
             var product = _context.Products.Find(id);
 
-            if(product == null)
+            if (product == null)
             {
                 return RedirectToAction("Index", "Products");
             }
@@ -141,12 +214,12 @@ namespace SmarthStore.Controllers
         {
             var product = _context.Products.Find(id);
 
-            if(product == null)
+            if (product == null)
             {
                 return RedirectToAction("Index", "Products");
             }
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 ViewData["ProductId"] = product.Id;
                 ViewData["ImageFileName"] = product.ImageFileName;
@@ -157,7 +230,7 @@ namespace SmarthStore.Controllers
 
             //Update the image file if we have a new image file
             string newFileName = product.ImageFileName;
-            if(productDto.ImageFile != null)
+            if (productDto.ImageFile != null)
             {
                 newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff");
                 newFileName += Path.GetExtension(productDto.ImageFile.FileName);
