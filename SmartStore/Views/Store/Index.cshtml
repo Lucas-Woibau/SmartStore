@@ -1,0 +1,37 @@
+﻿@{
+}
+
+<h2 class="pb-4 text-center">Products</h2>
+<div class="row mb-5 g-3">
+    @foreach (var product in ViewBag.Products)
+    {
+        <div class="col-lg-3 col-md-6">
+            <div class="rounded border shadow p-3 text-center h-100">
+                <img src="/products/@product.ImageFileName" class="img-fluid" alt="..." style="height:180px; object-fit:contain" />
+                <hr />
+                <h5 class="py-2">@product.Name</h5>
+                <p>
+                    Brand: @product.Brand, Category: @product.Category
+                </p>
+                <h4 class="mb-3">@(product.Price)$</h4>
+                <a class="btn btn-primary btn-sm mb-2" href="" role="button">Details</a>
+                <button type="button" class="btn btn-warning btn-sm mb-2">
+                    Add to cart <i class="bg-info bi-cart4"></i>
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+<nav>
+    <ul class="pagination">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            string active = "";
+            if (i == ViewBag.pageIndex) active = "active";
+            <li class="page-item @active">
+                <a class="page-link" asp-route-pageIndex="@i">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

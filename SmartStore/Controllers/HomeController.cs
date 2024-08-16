@@ -1,25 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
 using SmarthStore.Models;
+using SmarthStore.Services;
 using System.Diagnostics;
 
 namespace SmarthStore.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var products = _context.Products.OrderByDescending(p => p.Id).Take(4).ToList();
+            return View(products);
         }
 
         public IActionResult Privacy()
-        {
+        {          
             return View();
         }
 

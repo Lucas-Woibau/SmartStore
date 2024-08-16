@@ -1,8 +1,48 @@
-﻿@{
+﻿@model List<Product>
+
+@{
     ViewData["Title"] = "Home Page";
+    ViewData["HomePage"] = true;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div style="background-color: #08618d">
+    <div class="container text-white py-5" >
+        <div class="row align-items-center g-5">
+            <div class="col-md-6">
+                <h1 class="mb-5 display-2"><strong>Best Store of electrionics</strong></h1>
+                <p>
+                    Find a large selection of newest eletronic devices from most abrands and with affordable prices.
+                </p>
+            </div>
+            <div class="col-md-6 text-center">
+                <img src="/images/hero.png" class="img-fluid" alt="hero" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-light">
+    <div class="container py-4">
+        <h2 class="pb-4 text-center">Newest Products</h2>
+        <div class="row mb-5 g-3">
+            @foreach (var product in Model)
+            {
+                <div class="col-lg-3 col-md-6">
+                    <div class="rounded border shadow p-3 text-center h-100">
+                        <img src="/products/@product.ImageFileName" class="img-fluid" alt="..." style="height:180px; object-fit:contain" />
+                        <hr />
+                        <h5 class="py-2">@product.Name</h5>
+                        <p>
+                            Brand: @product.Brand, Category: @product.Category
+                        </p>
+                        <h4 class="mb-3">@(product.Price)$</h4>
+                        <a class="btn btn-primary btn-sm mb-2" href="" role="button">Details</a>
+                        <button type="button" class="btn btn-warning btn-sm mb-2">
+                            Add to cart <i class="bg-info bi-cart4"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>
