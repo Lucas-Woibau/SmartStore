@@ -1,4 +1,5 @@
-﻿@model List<Product>
+﻿@using Microsoft.AspNetCore.Html
+@model List<Product>
 @{
     int pageIndex = (int)ViewData["PageIndex"]!;
     int totalPages = (int)ViewData["TotalPages"]!;
@@ -7,6 +8,15 @@
 
     string column = (string)ViewData["Column"]!;
     string orderBy = (string)ViewData["OrderBy"];
+
+    HtmlString getArrow(string tableColumn)
+    {
+        if (tableColumn != column) return new HtmlString("");
+
+        if (orderBy == "desc") return new HtmlString("<i class='bi bi-arrow-down'></i>");
+
+        return new HtmlString("<i class='bi bi-arrow-up'></i>");
+    }
 }
 
 <h2 class="text-center mb-5">List of Products</h2>
@@ -42,13 +52,13 @@
 <table class="table">
     <thead>
         <tr>
-            <th style="cursor:pointer" onclick="sortTable('Id')">ID</th>
-            <th style="cursor:pointer" onclick="sortTable('Name')">Name</th>
-            <th style="cursor:pointer" onclick="sortTable('Brand')">Brand</th>
-            <th style="cursor:pointer" onclick="sortTable('Category')">Category</th>
-            <th style="cursor:pointer" onclick="sortTable('Price')">Price</th>
+            <th style="cursor:pointer" onclick="sortTable('Id')">ID @getArrow("Id")</th>
+            <th style="cursor:pointer" onclick="sortTable('Name')">Name @getArrow("Name")</th>
+            <th style="cursor:pointer" onclick="sortTable('Brand')">Brand @getArrow("Brand")</th>
+            <th style="cursor:pointer" onclick="sortTable('Category')">Category @getArrow("Category")</th>
+            <th style="cursor:pointer" onclick="sortTable('Price')">Price @getArrow("Price")</th>
             <th>Image</th>
-            <th style="cursor:pointer" onclick="sortTable('Createdat')">Created At</th>
+            <th style="cursor:pointer" onclick="sortTable('CreatedAt')">Created At @getArrow("CreatedAt")</th>
             <th>Action</th>
         </tr>
     </thead>
