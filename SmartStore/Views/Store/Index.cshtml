@@ -1,7 +1,46 @@
-﻿@{
+﻿@using SmartStore.Models
+
+@model StoreSearchModel
+@{
 }
 
 <h2 class="pb-4 text-center">Products</h2>
+
+<form class="row g-3 mb-3">
+    <div class="col-lg-2 col-md-4">
+        <select class="form-select" name="brand" asp-for="Brand" onchange="this.form.submit()">
+            <option value="">All brands</option>
+            <option value="Samsung">Samsung</option>
+            <option value="Apple">Apple</option>
+            <option value="Nokia">Nokia</option>
+            <option value="HP">HP</option>
+        </select>
+    </div>
+    <div class="col-lg-2 col-md-4">
+        <select class="form-select" name="category" asp-for="Category" onchange="this.form.submit()">
+            <option value="">All categories</option>
+            <option value="Phones">Phones</option>
+            <option value="Computers">Computers</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Printers">Printers</option>
+            <option value="Cameras">Cameras</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+    <div class="col-lg-2 col-md-4">
+        <select class="form-select" name="sort" asp-for="Sort" onchange="this.form.submit()">
+            <option value="">All brands</option>
+            <option value="newest">Order By Newest</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+        </select>
+    </div>
+    <div class="col-lg-6 col-md-12 d-flex">
+        <input class="form-control me-2" name="search" asp-for="Search" placeholder="Search by Name" />
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </div>
+</form>
+
 <div class="row mb-5 g-3">
     @foreach (var product in ViewBag.Products)
     {
@@ -14,7 +53,7 @@
                     Brand: @product.Brand, Category: @product.Category
                 </p>
                 <h4 class="mb-3">@(product.Price)$</h4>
-                <a class="btn btn-primary btn-sm mb-2" href="" role="button">Details</a>
+                <a class="btn btn-primary btn-sm mb-2" asp-controller="Store" asp-action="Details" asp-route-id="@product.Id" role="button">Details</a>
                 <button type="button" class="btn btn-warning btn-sm mb-2">
                     Add to cart <i class="bg-info bi-cart4"></i>
                 </button>
@@ -30,7 +69,11 @@
             string active = "";
             if (i == ViewBag.pageIndex) active = "active";
             <li class="page-item @active">
-                <a class="page-link" asp-route-pageIndex="@i">@i</a>
+                <a class="page-link" asp-route-pageIndex="@i"
+                asp-route-search="@Model.Search"
+                   asp-route-brand="@Model.Brand"
+                   asp-route-category="@Model.Category"
+                   asp-route-sort="@Model.Sort">@i</a>
             </li>
         }
     </ul>
