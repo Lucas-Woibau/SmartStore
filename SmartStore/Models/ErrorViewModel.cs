@@ -1,4 +1,4 @@
-namespace SmarthStore.Models
+namespace SmartStore.Models
 {
     public class ErrorViewModel
     {

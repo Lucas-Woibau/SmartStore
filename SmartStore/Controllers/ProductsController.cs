@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SmarthStore.Models;
-using SmarthStore.Services;
+using SmartStore.Models;
+using SmartStore.Services;
 
-namespace SmarthStore.Controllers
+namespace SmartStore.Controllers
 {
     [Route("/Admin/[controller]/{action=Index}/{id?}")]
     public class ProductsController : Controller

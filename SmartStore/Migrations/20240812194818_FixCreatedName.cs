@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace SmarthStore.Migrations
+namespace SmartStore.Migrations
 {
     /// <inheritdoc />
     public partial class FixCreatedName : Migration

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SmarthStore.Models;
+using SmartStore.Models;
 using SmartStore.Models;
 
-namespace SmarthStore.Services
+namespace SmartStore.Services
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

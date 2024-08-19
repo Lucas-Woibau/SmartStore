@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SmarthStore.Services;
+using SmartStore.Services;
 
 #nullable disable
 
-namespace SmarthStore.Migrations
+namespace SmartStore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240812194818_FixCreatedName")]
@@ -25,7 +25,7 @@ namespace SmarthStore.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SmarthStore.Models.Product", b =>
+            modelBuilder.Entity("SmartStore.Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SmarthStore.Models;
-using SmarthStore.Services;
+using SmartStore.Models;
+using SmartStore.Services;
 using SmartStore.Models;
 
 namespace SmartStore.Controllers

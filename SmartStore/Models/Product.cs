@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace SmarthStore.Models
+namespace SmartStore.Models
 {
     public class Product
     {

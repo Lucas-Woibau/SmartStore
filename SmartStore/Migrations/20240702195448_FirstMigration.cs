@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace SmarthStore.Migrations
+namespace SmartStore.Migrations
 {
     /// <inheritdoc />
     public partial class FirstMigration : Migration

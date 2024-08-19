@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SmarthStore.Services;
+using SmartStore.Services;
 using SmartStore.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,5 +45,15 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetService(typeof(UserManager<ApplicationUser>))
+        as UserManager<ApplicationUser>;
+    var roleManager = scope.ServiceProvider.GetService(typeof(RoleManager<IdentityRole>))
+        as RoleManager<IdentityRole>;
+
+    await DatabaseInitializer.SeedDataAsync(userManager, roleManager);
+}
 
 app.Run();

@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using SmarthStore.Models;
-using SmarthStore.Services;
+using SmartStore.Models;
+using SmartStore.Services;
 using System.Diagnostics;
 
-namespace SmarthStore.Controllers
+namespace SmartStore.Controllers
 {
     public class HomeController : Controller
     {
