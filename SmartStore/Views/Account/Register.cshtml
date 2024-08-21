@@ -7,6 +7,8 @@
         <h2 class="text-center mb-3">Register</h2>
         <hr />
 
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
         <form method="post">
             <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">First Name*</label>
@@ -25,6 +27,14 @@
             </div>
 
             <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Email*</label>
+                <div class="col-sm-8">
+                    <input class="form-control" asp-for="Email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">Phone</label>
                 <div class="col-sm-8">
                     <input class="form-control" asp-for="PhoneNumber" />
@@ -39,11 +49,11 @@
                     <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
             </div>
-            
+
             <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">Password*</label>
                 <div class="col-sm-8">
-                    <input class="form-control" type="password" asp-for="Password" />
+                    <input class="form-control" type="password" asp-for="Password">
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
             </div>
@@ -51,7 +61,7 @@
             <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">Confirm Password*</label>
                 <div class="col-sm-8">
-                    <input class="form-control" type="password" asp-for="ConfirmPassword" />
+                    <input class="form-control" type="password" asp-for="ConfirmPassword">
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
             </div>
@@ -61,7 +71,9 @@
                     <button type="submit" class="btn btn-primary">Register</button>
                 </div>
                 <div class="col-sm-4 d-grid">
-                    <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Index" role="button">Cancel</a>
+                    <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Index" role="button">
+                        Cancel
+                    </a>
                 </div>
             </div>
         </form>

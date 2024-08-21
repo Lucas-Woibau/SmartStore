@@ -19,5 +19,45 @@ namespace SmartStore.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterDto registerDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(registerDto);
+            }
+
+            var user = new ApplicationUser()
+            {
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName,
+                UserName = registerDto.Email,
+                Email = registerDto.Email,
+                PhoneNumber = registerDto.PhoneNumber,
+                Adress = registerDto.Address,
+                CreatedAt = DateTime.Now,
+            };
+
+            var result = await userManager.CreateAsync(user, registerDto.Password);
+
+            if (result.Succeeded)
+            {
+                // successful registration 
+                await userManager.AddToRoleAsync(user, "client");
+                // sign in the new user
+                await signInManager.SignInAsync(user, false);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            // registration failed => erros
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+
+            return View(registerDto);
+        }
     }
 }
