@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SmartStore.Models;
 
@@ -17,12 +18,21 @@ namespace SmartStore.Controllers
         }
         public IActionResult Register()
         {
+            if (signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
+            if (signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(registerDto);
@@ -58,6 +68,65 @@ namespace SmartStore.Controllers
             }
 
             return View(registerDto);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            if (signInManager.IsSignedIn(User))
+            {
+                await signInManager.SignOutAsync();
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Login()
+        {
+            if (signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+            if (signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(loginDto);
+            }
+
+            var result = await signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password,
+                loginDto.RememberMe, false);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Invalid login attempt.";
+            }
+
+            return View(loginDto);
+        }
+
+        [Authorize]
+        public IActionResult Profile()
+        {
+            return View();
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return RedirectToAction("Index", "Home");
         }
     }
 }
