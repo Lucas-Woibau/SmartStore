@@ -13,7 +13,7 @@
             <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">First Name*</label>
                 <div class="col-sm-8">
-                    <input class="form-control" asp-for="FirstName" />
+                    <input class="form-control" asp-for="FirstName">
                     <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
             </div>
@@ -21,7 +21,7 @@
             <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">Last Name*</label>
                 <div class="col-sm-8">
-                    <input class="form-control" asp-for="LastName" />
+                    <input class="form-control" asp-for="LastName">
                     <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
             </div>
@@ -37,15 +37,15 @@
             <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">Phone</label>
                 <div class="col-sm-8">
-                    <input class="form-control" asp-for="PhoneNumber" />
+                    <input class="form-control" asp-for="PhoneNumber">
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label class="col-sm-4 col-form-label">Address</label>
+                <label class="col-sm-4 col-form-label">Address*</label>
                 <div class="col-sm-8">
-                    <input class="form-control" asp-for="Address" />
+                    <input class="form-control" asp-for="Address">
                     <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
             </div>
@@ -65,6 +65,7 @@
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
             </div>
+
 
             <div class="row mb-3">
                 <div class="offset-sm-4 col-sm-4 d-grid">
