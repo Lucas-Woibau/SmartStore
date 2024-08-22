@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using SmartStore.Models;
+using SmartStore.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SmartStore.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace SmartStore.Controllers
@@ -11,12 +12,15 @@ namespace SmartStore.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IConfiguration _configuration;
 
         public AccountController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _configuration = configuration;
         }
         public IActionResult Register()
         {
@@ -247,17 +251,87 @@ namespace SmartStore.Controllers
             }
 
             var user = await _userManager.FindByEmailAsync(email);
+
             if (user != null)
             {
+                // generate password reset token
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 string resetUrl = Url.ActionLink("ResetPassword", "Account", new { token }) ?? "URL Error";
 
-                Console.WriteLine("Password reset link: " + resetUrl);
+                // send url by email
+                string senderName = _configuration["BrevoSettings:SenderName"] ?? "";
+                string senderEmail = _configuration["BrevoSettings:SenderEmail"] ?? "";
+                string username = user.FirstName + " " + user.LastName;
+                string subject = "Password Reset";
+                string message = "Dear " + username + ",\n\n" +
+                                 "You can reset your password using the following link:\n\n" +
+                                 resetUrl + "\n\n" +
+                                 "Best Regards";
+
+                EmailSender.SendEmail(senderName, senderEmail, username, email, subject, message);
             }
 
-            ViewBag.SuccessMessage = "Please check yout Email account and click on the Password Reset link!";
+            ViewBag.SuccessMessage = "Please check your Email account and click on the Password Reset link!";
 
             return View();
+        }
+
+        public IActionResult ResetPassword(string? token)
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (token == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(string? token, PasswordResetDto model)
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (token == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = "Token not valid!";
+                return View(model);
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, token, model.Password);
+
+            if (result.Succeeded)
+            {
+                ViewBag.SuccessMessage = "Password reset successfully!";
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+
+            return View(model);
         }
     }
 }
