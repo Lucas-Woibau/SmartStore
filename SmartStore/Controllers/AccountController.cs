@@ -174,10 +174,44 @@ namespace SmartStore.Controllers
             {
                 ViewBag.ErrorMessage = "Unable to update the profile:" + result.Errors.First().Description;
             }
-
-            
-
+           
             return View(profileDto);
+        }
+
+        [Authorize]
+        public IActionResult Password()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Password(PasswordDto passwordDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var appUser = await _userManager.GetUserAsync(User);
+            if (appUser == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(appUser, 
+                passwordDto.CurrentPassword, passwordDto.NewPassword);
+
+            if (result.Succeeded)
+            {
+                ViewBag.SuccessMessage = "Profile updated successfuly";
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Unable to update the profile:" + result.Errors.First().Description;
+            }
+
+            return View();
         }
 
         public IActionResult AccessDenied()
