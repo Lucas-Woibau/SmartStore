@@ -146,7 +146,7 @@ namespace SmartStore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ProductDTO productDto)
+        public IActionResult Create(ProductDto productDto)
         {
             if (productDto.ImageFile == null)
             {
@@ -196,7 +196,7 @@ namespace SmartStore.Controllers
             }
 
             //Create productDto from product
-            var productDto = new ProductDTO()
+            var productDto = new ProductDto()
             {
                 Name = product.Name,
                 Brand = product.Brand,
@@ -213,7 +213,7 @@ namespace SmartStore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, ProductDTO productDto)
+        public IActionResult Edit(int id, ProductDto productDto)
         {
             var product = _context.Products.Find(id);
 

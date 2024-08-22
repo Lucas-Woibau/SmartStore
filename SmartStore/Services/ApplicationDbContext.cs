@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SmartStore.Models;
-using SmartStore.Models;
 
 namespace SmartStore.Services
 {

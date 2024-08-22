@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SmartStore.Models
 {
-    public class ProductDTO
+    public class ProductDto
     {
         [Required,MaxLength(100)]
         public string Name { get; set; } = "";
