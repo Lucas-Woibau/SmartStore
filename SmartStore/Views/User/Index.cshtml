@@ -1,0 +1,58 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model List<ApplicationUser>
+@inject UserManager<ApplicationUser> UserManager
+@{
+}
+
+<h2 class="text-center mb-5">List of Users</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Created At</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@(user.FirstName + " " + user.LastName)</td>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumber</td>
+                <td>
+                    @{
+                        var roles = await UserManager.GetRolesAsync(user);
+                        var rolesStr = String.Join(", ", roles);
+
+                        string color = "bg-secondary";
+                        if (roles.Contains("admin"))
+                        {
+                            color = "bg-warning text-dark";
+                        }
+                        else if (roles.Contains("seller"))
+                        {
+                            color = "bg-success";
+                        }
+                        else if (roles.Contains("client"))
+                        {
+                            color = "bg-primary";
+                        }
+
+                        <span class="badge rounded-pill @color">@rolesStr</span>
+                    }
+                </td>
+                <th>@user.CreatedAt.ToString("MM/dd/yyyy")</th>
+                <th>
+                    <a class="btn btn-primary btn-sm" asp-controller="Users" asp-action="Details"
+                       asp-route-id="@user.Id">Details</a>
+                </th>
+            </tr>
+        }
+    </tbody>
+</table>
