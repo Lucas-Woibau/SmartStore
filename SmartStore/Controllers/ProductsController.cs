@@ -11,7 +11,7 @@ namespace SmartStore.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _environment;
-        private readonly int _pageSzie = 5;
+        private readonly int _pageSize = 5;
 
         public ProductsController(ApplicationDbContext context, IWebHostEnvironment environment)
         {
@@ -124,8 +124,8 @@ namespace SmartStore.Controllers
             }
 
             decimal count = query.Count();
-            int totalPages = (int)Math.Ceiling(count / _pageSzie);
-            query = query.Skip((pageIndex - 1) * _pageSzie).Take(_pageSzie);
+            int totalPages = (int)Math.Ceiling(count / _pageSize);
+            query = query.Skip((pageIndex - 1) * _pageSize).Take(_pageSize);
 
             var products = query.ToList();
 

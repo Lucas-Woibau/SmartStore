@@ -1,0 +1,77 @@
+﻿@model ApplicationUser
+@{
+}
+
+<div class="row">
+    <div class="col-lg-6  mx-auto rounded border  p-4">
+        <h2 class="text-center mb-3">User Details</h2>
+        <hr />
+
+        <div class="row mb-2">
+            <div class="col-sm-4">First Name</div>
+            <div class="col-sm-8">@Model.FirstName</div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-sm-4">Last Name</div>
+            <div class="col-sm-8">@Model.LastName</div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-sm-4">Email</div>
+            <div class="col-sm-8">@Model.Email</div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-sm-4">Phone</div>
+            <div class="col-sm-8">@Model.PhoneNumber</div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-sm-4">Address</div>
+            <div class="col-sm-8">@Model.Adress</div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-sm-4">Role</div>
+            <div class="col-sm-8">
+                @{
+                    var roles = ViewBag.Roles;
+                    var rolesStr = String.Join(", ", roles);
+
+                    string color = "bg-secondary";
+                    if (roles.Contains("admin"))
+                    {
+                        color = "bg-warning text-dark";
+                    }
+                    else if (roles.Contains("seller"))
+                    {
+                        color = "bg-success";
+                    }
+                    else if (roles.Contains("client"))
+                    {
+                        color = "bg-primary";
+                    }
+
+                    <span class="badge rounded-pill @color">@rolesStr</span>
+                }
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-sm-4">Created At</div>
+            <div class="col-sm-8">@Model.CreatedAt</div>
+        </div>
+
+        <hr />
+
+        <div>
+            <a class="btn btn-primary" asp-controller="User" asp-action="Index">Back</a>
+
+            <button type="button" class="btn btn-danger">
+                Delete
+            </button>
+        </div>
+
+    </div>
+</div>
