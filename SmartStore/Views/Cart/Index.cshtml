@@ -1,0 +1,42 @@
+﻿
+@{
+}
+
+<div class="row border rounded-3">
+    <div class="col-md-8 p-3">
+        <h4>Shopping Cart</h4>
+        <hr />
+
+        <table class="table align-middle">
+            <tbody>
+                @foreach (var item in ViewBag.CartItems)
+                {
+                    <tr>
+                        <td>
+                            <img src="/products/@item.Product.ImageFileName" width="100" class="rounded" alt="..." />
+                        </td>
+                        <td>
+                            <h4>@item.Product.Name</h4>
+                            <p>
+                                Brand: @item.Product.Brand<br />
+                                Category: @item.Product.Category<br />
+                                Price: @(item.Product.Price)$
+                            </p>
+                        </td>
+                        <td style="white-space:nowrap">
+                            <button type="button" class="btn btn-outline-secondary btn-sm">-</button>
+                            <span class="border rounded-3 p-2 m-1">@item.Quantity</span>
+                            <button type="button" class="btn btn-outline-secondary btn-sm">+</button>
+                        </td>
+                        <td>@(item.UnitPrice * item.Quantity)$</td>
+                        <td><i class="bg bi-trash text-danger h4" style="cursor:pointer"></i></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    <div class="col-md-4">
+
+    </div>
+</div>
