@@ -23,7 +23,7 @@
 
                     try {
                         let cart = JSON.parse(atob(cookie_value));
-                        return getShoppingCart;
+                        return cart;
                     }
                     catch (exception) {
                         break;
@@ -89,12 +89,14 @@
                         </li>
                     </ul>
 
+                    @using SmartStore.Services
+
                     <ul class="navbar-nav me-2">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
                                 <i class="bi bi-cart4 text-danger h3"></i>
                                 <span id="CartSize" class="badge rounded-pill bg-danger" style="vertical-align:top">
-                                    0
+                                    @CartHelper.GetCartSize(Context.Request, Context.Response)
                                 </span>
                             </a>
                         </li>
