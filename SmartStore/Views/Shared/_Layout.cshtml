@@ -67,6 +67,47 @@
             document.getElementById("CartSize").innerHTML = cartSize;
         }
 
+        function increase(id) {
+            let cart = getShoppingCart();
+
+            let quantity = cart[id];
+            if (isNaN(quantity)) {
+                cart[id] = 1;
+            }
+            else {
+                cart[id] = Number(quantity) + 1;
+            }
+
+            saveCart(cart);
+            location.reload();
+        }
+
+        function decrease(id) {
+            let cart = getShoppingCart();
+
+            let quantity = cart[id];
+            if (isNaN(quantity)) {
+                return;
+            }
+
+            quantity = Number(quantity);
+            if (quantity > 1) {
+                cart[id] = quantity - 1;
+                saveCart(cart);
+                location.reload();
+            }
+        }
+
+        function remove(id){
+            let cart = getShoppingCart();
+
+            if(cart[id]){
+                delete cart[id];
+                saveCart(cart);
+                location.reload();
+            }
+        }
+
     </script>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">

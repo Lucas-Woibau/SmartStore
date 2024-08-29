@@ -1,4 +1,5 @@
-﻿
+﻿@model CheckoutDto
+
 @{
 }
 
@@ -6,6 +7,14 @@
     <div class="col-md-8 p-3">
         <h4>Shopping Cart</h4>
         <hr />
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class='alert alert-warning alert-dismissible fade show' role='alert'>
+                <strong>@ViewBag.ErrorMessage</strong>
+                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+            </div>
+        }
 
         <table class="table align-middle">
             <tbody>
@@ -24,12 +33,13 @@
                             </p>
                         </td>
                         <td style="white-space:nowrap">
-                            <button type="button" class="btn btn-outline-secondary btn-sm">-</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="decrease(@item.Product.Id)">-</button>
                             <span class="border rounded-3 p-2 m-1">@item.Quantity</span>
-                            <button type="button" class="btn btn-outline-secondary btn-sm">+</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" 
+                                onclick="increase(@item.Product.Id)">+</button>
                         </td>
                         <td>@(item.UnitPrice * item.Quantity)$</td>
-                        <td><i class="bg bi-trash text-danger h4" style="cursor:pointer"></i></td>
+                        <td><i class="bg bi-trash text-danger h4" style="cursor:pointer" onclick="remove(@item.Product.Id)"></i></td>
                     </tr>
                 }
             </tbody>
@@ -37,6 +47,86 @@
 
     </div>
     <div class="col-md-4">
+        <div class="text-white rounded my-2 p-3" style="background-color: #08618d">
+            <h4>Order Summary</h4>
+            <hr />
 
+            @using Microsoft.AspNetCore.Identity
+            @inject SignInManager<ApplicationUser> SignInManager
+
+            @if (!SignInManager.IsSignedIn(User))
+            {
+                <div>
+                    <div class="row">
+                        <p class="col">Subtotal:</p>
+                    </div>
+                    <div class="col">
+                        <p class="text-end">@(ViewBag.Subtotal)$</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col d-grid">
+                        <a class="btn btn-light" asp-controller="Account" asp-action="Register">Register</a>
+                    </div>
+                    <div class="col d-grid">
+                        <a class="btn btn-outline-light" asp-controller="Account" asp-action="Login">Login</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Delivery Address</label>
+                        <input type="text" class="form-control" asp-for="DeliveryAddress"/>
+                        <span asp-validation-for="DeliveryAddress" class="text-warning"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Payment Method</label>
+                        <select class="form-select" asp-for="PaymentMethod">
+                            <option value="cash">Cash on Delivery</option>
+                            <option value="credit_card">Credit Card</option>
+                            <option value="paypal">Paypal</option>
+                            <option>Pix</option>
+                        </select>
+                    </div>
+                    <hr />
+
+                    <div class="row">
+                        <div class="col">
+                            <p >Subtotal:</p>
+                        </div>
+                        <div class="col">
+                            <p class="text-end">@(ViewBag.Subtotal)$</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <p >Shipping:</p>
+                        </div>
+                        <div class="col">
+                            <p class="text-end">@(ViewBag.ShippingFee)$</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <p >Total:</p>
+                        </div>
+                        <div class="col">
+                            <p class="text-end">@(ViewBag.Total)$</p>
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button class="btn btn-outline-light" type="submit">Checkout</button>
+                    </div>
+
+                </form>
+            }
+
+        </div>
     </div>
 </div>
