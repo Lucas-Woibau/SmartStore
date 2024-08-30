@@ -39,5 +39,20 @@ namespace SmartStore.Controllers
 
             return View();
         }
+
+        public IActionResult Details(int id)
+        {
+            var order = _context.Orders.Include(_o => _o.Client).Include(o => o.Items)
+                .ThenInclude(o => o.Product).FirstOrDefault(o => o.Id == id);
+
+            if (order == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.NumOrders = _context.Orders.Where(o => o.ClientId == order.ClientId).Count();
+
+            return View(order);
+        }
     }
 }
