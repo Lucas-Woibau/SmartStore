@@ -6,8 +6,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Id</th>
-            <th>Client</th>
             <th>Units</th>
             <th>Total</th>
             <th>Payment Method</th>
@@ -74,8 +72,6 @@
             }
 
             <tr>
-                <td>@order.Id</td>
-                <td>@(order.Client.FirstName + " " + order.Client.LastName)</td>
                 <td>@count</td>
                 <td>@(total)$</td>
                 <td>@order.PaymentMethod</td>
@@ -83,7 +79,7 @@
                 <td><span class="badge rounded-pill @orderBadgeColor">@order.OrderStatus</span></td>
                 <td>@order.CreatedAt.ToString("MM/dd/yyyy")</td>
                 <td>
-                    <a class="btn btn-primary btn-sm" asp-controller="AdminOrders" asp-action="Details"
+                    <a class="btn btn-primary btn-sm" asp-controller="ClientOrders" asp-action="Details"
                        asp-route-id="@order.Id">Details</a>
                 </td>
             </tr>

@@ -5,7 +5,7 @@
     {
         paymentBadgeColor = "bg-warning text-dark";
     }
-    else if (Model.PaymentStatus == "acepted")
+    else if (Model.PaymentStatus == "accepted")
     {
         paymentBadgeColor = "bg-success";
     }
@@ -71,12 +71,25 @@
 
             <div class="row mb-2 pb-2 border-bottom">
                 <div class="col">Payment Status</div>
-                <div class="col"><span class="badge rounded-pill @paymentBadgeColor">@Model.PaymentStatus</span></div>
+                <div class="col">
+                    <span class="badge rounded-pill @paymentBadgeColor">@Model.PaymentStatus</span>
+                    <a href="#" class="mx-2" data-bs-toggle="modal" data-bs-target="#paymentStatusModal">
+                        Edit
+                    </a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#paymentDetailsModal">
+                        Details
+                    </a>
+                </div>
             </div>
 
             <div class="row mb-2 pb-2 border-bottom">
                 <div class="col">Order Status</div>
-                <div class="col"><span class="badge rounded-pill @paymentBadgeColor">@Model.OrderStatus</span></div>
+                <div class="col">
+                    <span class="badge rounded-pill @orderBadgeColor">@Model.OrderStatus</span>
+                    <a href="#" class="ms-2" data-bs-toggle="modal" data-bs-target="#orderStatusModal">
+                        Edit
+                    </a>
+                </div>
             </div>
 
             <div class="row mb-2 pb-2 border-bottom">
@@ -148,7 +161,7 @@
                     <td>
                         <h4>
                             <a style="text-decoration:none; color:inherit;" asp-controller="Store"
-                                asp-action="Details" asp-route-id="@item.Product.Id">
+                               asp-action="Details" asp-route-id="@item.Product.Id">
                                 @item.Product.Name
                             </a>
                         </h4>
@@ -175,6 +188,86 @@
     <div class="row">
         <div class="col fw-bold">Total:</div>
         <div class="col text-end">@(subtotal + Model.ShippingFee)$</div>
+    </div>
+</div>
+
+<!-- Modal Payment Status -->
+<div class="modal fade" id="paymentStatusModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Payment Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="get" asp-controller="AdminOrders" asp-action="Edit">
+                    <input type="hidden" value="@Model.Id" name="id" />
+                    <label>Payment Status</label>
+                    <select class="form-select mb-2" name="payment_status" asp-for="PaymentStatus">
+                        <option value="pending">pending</option>
+                        <option value="accepted">accepted</option>
+                        <option value="canceled">canceled</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Order Status-->
+<div class="modal fade" id="orderStatusModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Order Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="get" asp-controller="AdminOrders" asp-action="Edit">
+                    <input type="hidden" value="@Model.Id" name="id" />
+                    <label>Order Status</label>
+                    <select class="form-select mb-2" name="order_status" asp-for="OrderStatus">
+                        <option value="created">created</option>
+                        <option value="accepted">accepted</option>
+                        <option value="canceled">canceled</option>
+                        <option value="shipped">shipped</option>
+                        <option value="delivered">delivered</option>
+                        <option value="returned">returned</option>
+                        <option value="deleted">deleted</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Payment Details-->
+<div class="modal fade" id="paymentDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Payment Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="white-space: pre-wrap; font-family:monospace">@Html.Raw(Model.PaymentDetails)</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
