@@ -8,7 +8,7 @@ using SmartStore.Services;
 namespace SmartStore.Controllers
 {
     [Authorize(Roles = "client")]
-    [Route("/Client/Orders{action=Index}/{id?}")]
+    [Route("/Client/Orders/{action=Index}/{id?}")]
     public class ClientOrdersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -50,5 +50,28 @@ namespace SmartStore.Controllers
 
             return View();
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var order = _context.Orders.Include(o => o.Items)
+                .ThenInclude(o => o.Product)
+                .Where(o => o.ClientId == currentUser.Id)
+                .FirstOrDefault(o => o.Id == id);
+
+            if (order == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View(order);
+        }
+
     }
 }

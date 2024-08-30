@@ -1,0 +1,144 @@
+﻿@model Order
+@{
+    string paymentBadgeColor = "bg-danger";
+    if (Model.PaymentStatus == "pending")
+    {
+        paymentBadgeColor = "bg-warning text-dark";
+    }
+    else if (Model.PaymentStatus == "accepted")
+    {
+        paymentBadgeColor = "bg-success";
+    }
+    else if (Model.PaymentStatus == "canceled")
+    {
+        paymentBadgeColor = "bg-secondary";
+    }
+
+    string orderBadgeColor = "bg-danger";
+    if (Model.OrderStatus == "created")
+    {
+        orderBadgeColor = "bg-warning text-dark";
+    }
+    else if (Model.OrderStatus == "accepted")
+    {
+        orderBadgeColor = "bg-success";
+    }
+    else if (Model.OrderStatus == "canceled")
+    {
+        orderBadgeColor = "bg-secondary";
+    }
+    else if (Model.OrderStatus == "shipped")
+    {
+        orderBadgeColor = "bg-primary";
+    }
+    else if (Model.OrderStatus == "delivered")
+    {
+        orderBadgeColor = "bg-success";
+    }
+    else if (Model.OrderStatus == "returned")
+    {
+        orderBadgeColor = "bg-info text-dark";
+    }
+    else if (Model.OrderStatus == "deleted")
+    {
+        orderBadgeColor = "bg-dark";
+    }
+}
+
+<h3 class="text-center mb-4">Order Details</h3>
+
+<a class="btn btn-link" asp-controller="ClientOrders" asp-action="Index">Orders</a>
+
+<div class="row mb-4">
+    <div class="col">
+        <div class="border rounded py-4 px-4 h-100">
+            <h3 class="mb-4">Order</h3>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Order ID</div>
+                <div class="col">@Model.Id</div>
+            </div>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Delivery Address</div>
+                <div class="col">@Model.DeliveryAddress</div>
+            </div>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Payment Method</div>
+                <div class="col">@Model.PaymentMethod</div>
+            </div>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Payment Status</div>
+                <div class="col">
+                    <span class="badge rounded-pill @paymentBadgeColor">@Model.PaymentStatus</span>
+                </div>
+            </div>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Order Status</div>
+                <div class="col">
+                    <span class="badge rounded-pill @orderBadgeColor">@Model.OrderStatus</span>
+                </div>
+            </div>
+
+            <div class="row mb-2 pb-2 border-bottom">
+                <div class="col">Order Date</div>
+                <div class="col">@Model.CreatedAt</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width: 100px">Description</th>
+            <th></th>
+            <th style="width: 100px">Units</th>
+            <th style="width: 100px">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            decimal subtotal = 0;
+            foreach (var item in Model.Items)
+            {
+                subtotal += item.UnitPrice * item.Quantity;
+                <tr>
+                    <td>
+                        <img src="/products/@item.Product.ImageFileName" width="100" alt="..." />
+                    </td>
+                    <td>
+                        <h4>
+                            <a style="text-decoration:none; color:inherit;" asp-controller="Store"
+                               asp-action="Details" asp-route-id="@item.Product.Id">
+                                @item.Product.Name
+                            </a>
+                        </h4>
+                        @item.Product.Category<br />
+                        @(item.UnitPrice)$
+                    </td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.UnitPrice * item.Quantity)$</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div class="ms-auto mb-3" style="width:250">
+    <div class="row">
+        <div class="col fw-bold">Subtotal:</div>
+        <div class="col text-end">@(subtotal)$</div>
+    </div>
+    <div class="row">
+        <div class="col fw-bold">Shipping Fee:</div>
+        <div class="col text-end">@(Model.ShippingFee)$</div>
+    </div>
+    <div class="row">
+        <div class="col fw-bold">Total:</div>
+        <div class="col text-end">@(subtotal + Model.ShippingFee)$</div>
+    </div>
+</div>
